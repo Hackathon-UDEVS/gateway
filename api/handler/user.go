@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 
-	pb "gateway/internal/genproto/auth"
+	"gateway/internal/genproto/auth"
 )
 
 // Login godoc
@@ -14,15 +14,15 @@ import (
 // @Description Logs in a user and returns user data
 // @Accept json
 // @Produce json
-// @Param login body pb.LoginReq true "Login request"
-// @Success 200 {object} pb.LoginResp "Login successful"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param login body auth.LoginReq true "Login request"
+// @Success 200 {object} auth.LoginRes "Login successful"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /login [post]
 func (h *Handler) Login(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.LoginReq
+	var req auth.LoginReq
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing data")
@@ -45,15 +45,15 @@ func (h *Handler) Login(r *gin.Context) {
 // @Description Registers a new user and returns user data
 // @Accept json
 // @Produce json
-// @Param register body pb.RegisterUserReq true "Register request"
-// @Success 200 {object} pb.RegisterUserResp "Registration successful"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param register body auth.RegisterUserReq true "Register request"
+// @Success 200 {object} auth.RegisterUserRes "Registration successful"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /register [post]
 func (h *Handler) Register(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.RegisterUserReq
+	var req auth.RegisterUserReq
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing data")
@@ -76,15 +76,15 @@ func (h *Handler) Register(r *gin.Context) {
 // @Description Verifies the user's email address
 // @Accept json
 // @Produce json
-// @Param verify body pb.VerifyUserReq true "Verify request"
-// @Success 200 {object} pb.VerifyUserResp "Email verification successful"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param verify body auth.VerifyUserReq true "Verify request"
+// @Success 200 {object} auth.VerifyUserRes "Email verification successful"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /verify-email [post]
 func (h *Handler) VerifyEmail(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.VerifyUserReq
+	var req auth.VerifyUserReq
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing data")
@@ -108,14 +108,14 @@ func (h *Handler) VerifyEmail(r *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Success 200 {object} pb.GetUserByIDResp "User data retrieved successfully"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Success 200 {object} auth.GetUserByIDRes "User data retrieved successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /get-user/{id} [get]
 func (h *Handler) GetUserByID(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.GetUserByIDReq
+	var req auth.GetUserByIDReq
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing data")
@@ -137,15 +137,15 @@ func (h *Handler) GetUserByID(r *gin.Context) {
 // @Description Retrieves a list of all users
 // @Accept json
 // @Produce json
-// @Param query body pb.GetAllUserReq true "Query parameters"
-// @Success 200 {object} pb.GetAllUserResp "List of users retrieved successfully"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param query body auth.GetAllUserReq true "Query parameters"
+// @Success 200 {object} auth.GetAllUserRes "List of users retrieved successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /getAll-users [get]
 func (h *Handler) GetAllUsers(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.GetAllUserReq
+	var req auth.GetAllUserReq
 
 	if err := r.ShouldBindQuery(&req); err != nil {
 		log.Error("Error while parsing data")
@@ -168,15 +168,15 @@ func (h *Handler) GetAllUsers(r *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path string true "User ID"
-// @Param update body pb.UpdateUserReq true "Update request"
-// @Success 200 {object} pb.UpdateUserResp "User updated successfully"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param update body auth.UpdateUserReq true "Update request"
+// @Success 200 {object} auth.UpdateUserRes "User updated successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /update-user/{id} [put]
 func (h *Handler) UpdateUser(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.UpdateUserReq
+	var req auth.UpdateUserReq
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing data")

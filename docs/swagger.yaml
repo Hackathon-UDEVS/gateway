@@ -1,0 +1,599 @@
+definitions:
+  auth.GetAllUserReq:
+    properties:
+      user_req:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  auth.GetAllUserRes:
+    properties:
+      user_res:
+        items:
+          $ref: '#/definitions/auth.UserModel'
+        type: array
+    type: object
+  auth.GetUserByIDRes:
+    properties:
+      user_res:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  auth.LoginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  auth.LoginRes:
+    properties:
+      user_res:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  auth.RegisterUserReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      role:
+        description: Must be either 'client' or 'contractors'
+        type: string
+    type: object
+  auth.RegisterUserRes:
+    properties:
+      message:
+        type: string
+    type: object
+  auth.UpdateUserReq:
+    properties:
+      user_req:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  auth.UpdateUserRes:
+    properties:
+      user_res:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  auth.UserModel:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  auth.VerifyUserReq:
+    properties:
+      sms_code:
+        type: string
+    type: object
+  auth.VerifyUserRes:
+    properties:
+      res:
+        $ref: '#/definitions/auth.UserModel'
+    type: object
+  clients.CreateTenderReq:
+    properties:
+      attachment:
+        description: Optional file URL
+        type: string
+      budget:
+        type: number
+      client_id:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      title:
+        type: string
+    type: object
+  clients.DeleteTenderReq:
+    properties:
+      tender_id:
+        type: string
+    type: object
+  clients.GetAllTendersReq:
+    properties:
+      status:
+        type: string
+    type: object
+  clients.GetMyTendersReq:
+    properties:
+      client_id:
+        type: string
+      status:
+        type: string
+    type: object
+  clients.ResponseMessage:
+    properties:
+      message:
+        type: string
+    type: object
+  clients.Tender:
+    properties:
+      attachment:
+        type: string
+      budget:
+        type: number
+      client_id:
+        type: string
+      deadline:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+  clients.TendersList:
+    properties:
+      tenders:
+        items:
+          $ref: '#/definitions/clients.Tender'
+        type: array
+    type: object
+  clients.UpdateTenderStatusReq:
+    properties:
+      budget:
+        type: string
+      description:
+        type: string
+      status:
+        description: e.g., "open", "closed", "awarded"
+        type: string
+      tender_id:
+        type: string
+    type: object
+  contractors.Bid:
+    properties:
+      comments:
+        type: string
+      contractor_id:
+        type: string
+      delivery_time:
+        type: string
+      id:
+        type: string
+      price:
+        type: number
+      status:
+        description: e.g., "submitted", "accepted", "rejected"
+        type: string
+      tender_id:
+        type: string
+    type: object
+  contractors.BidResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  contractors.BidsListResponse:
+    properties:
+      bids:
+        items:
+          $ref: '#/definitions/contractors.Bid'
+        type: array
+    type: object
+  contractors.SubmitBidRequest:
+    properties:
+      comments:
+        type: string
+      contractor_id:
+        type: string
+      delivery_time:
+        description: e.g., "2 weeks"
+        type: string
+      price:
+        type: integer
+      tender_id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /bids:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of bids for a tender
+      parameters:
+      - description: Tender ID
+        in: query
+        name: tenderId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of bids retrieved successfully
+          schema:
+            $ref: '#/definitions/contractors.BidsListResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get list of bids
+  /bids/my:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all bids made by the authenticated user on various tenders
+      parameters:
+      - description: Limit for pagination
+        in: query
+        name: limit
+        type: integer
+      - description: Offset for pagination
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of bids retrieved successfully
+          schema:
+            $ref: '#/definitions/contractors.BidsListResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get list of bids by the current user
+  /create-tender:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new tender and returns the created tender data
+      parameters:
+      - description: Tender creation request
+        in: body
+        name: tender
+        required: true
+        schema:
+          $ref: '#/definitions/clients.CreateTenderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender created successfully
+          schema:
+            $ref: '#/definitions/clients.ResponseMessage'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create a new tender
+  /delete-tender/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a tender by ID
+      parameters:
+      - description: Tender deletion request
+        in: body
+        name: tender
+        required: true
+        schema:
+          $ref: '#/definitions/clients.DeleteTenderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete a tender
+  /get-user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves user data by user ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User data retrieved successfully
+          schema:
+            $ref: '#/definitions/auth.GetUserByIDRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get user by ID
+  /getAll-tenders:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of tenders for the authenticated user
+      parameters:
+      - description: Query parameters
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/clients.GetMyTendersReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of tenders retrieved successfully
+          schema:
+            $ref: '#/definitions/clients.ResponseMessage'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get tenders
+  /getAll-users:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a list of all users
+      parameters:
+      - description: Query parameters
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/auth.GetAllUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of users retrieved successfully
+          schema:
+            $ref: '#/definitions/auth.GetAllUserRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get all users
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Logs in a user and returns user data
+      parameters:
+      - description: Login request
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login successful
+          schema:
+            $ref: '#/definitions/auth.LoginRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Login user
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a new user and returns user data
+      parameters:
+      - description: Register request
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Registration successful
+          schema:
+            $ref: '#/definitions/auth.RegisterUserRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Register user
+  /submit-bid:
+    post:
+      consumes:
+      - application/json
+      description: Submits a bid for a contractor
+      parameters:
+      - description: Bid submission request
+        in: body
+        name: bid
+        required: true
+        schema:
+          $ref: '#/definitions/contractors.SubmitBidRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Bid submitted successfully
+          schema:
+            $ref: '#/definitions/contractors.BidResponse'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Submit a bid
+  /tenders/sort:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves a sorted list of all tenders
+      parameters:
+      - description: Query parameters
+        in: body
+        name: query
+        required: true
+        schema:
+          $ref: '#/definitions/clients.GetAllTendersReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Sorted list of tenders retrieved successfully
+          schema:
+            $ref: '#/definitions/clients.TendersList'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Sort tenders
+  /update-tender:
+    put:
+      consumes:
+      - application/json
+      description: Updates the status of an existing tender
+      parameters:
+      - description: Tender update request
+        in: body
+        name: tender
+        required: true
+        schema:
+          $ref: '#/definitions/clients.UpdateTenderStatusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tender updated successfully
+          schema:
+            $ref: '#/definitions/clients.ResponseMessage'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update an existing tender
+  /update-user/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Updates user data by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Update request
+        in: body
+        name: update
+        required: true
+        schema:
+          $ref: '#/definitions/auth.UpdateUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated successfully
+          schema:
+            $ref: '#/definitions/auth.UpdateUserRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Update user
+  /verify-email:
+    post:
+      consumes:
+      - application/json
+      description: Verifies the user's email address
+      parameters:
+      - description: Verify request
+        in: body
+        name: verify
+        required: true
+        schema:
+          $ref: '#/definitions/auth.VerifyUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email verification successful
+          schema:
+            $ref: '#/definitions/auth.VerifyUserRes'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Verify user email
+swagger: "2.0"

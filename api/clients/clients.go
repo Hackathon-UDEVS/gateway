@@ -13,7 +13,7 @@ import (
 
 type Clients struct {
 	Client     clients.ClientServiceClient
-	Contractor contructor.BidServiceClient
+	Contractor contructor.ContractorServiceClient
 	User       auth.AuthServiceClient
 }
 
@@ -25,14 +25,18 @@ func NewClients(cfg *config.Config) (*Clients, error) {
 		return nil, err
 	}
 
+	conn1, err := grpc.NewClient(path, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+
 	client := clients.NewClientServiceClient(conn)
-	contractor := contructor.NewBidServiceClient(conn)
-	user := auth.NewAuthServiceClient(conn)
+	contractor := contructor.NewContractorServiceClient(conn)
+	user := auth.NewAuthServiceClient(conn1)
 
 	return &Clients{
 		Client:     client,
 		Contractor: contractor,
 		User:       user,
-
 	}, nil
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 
-	pb "gateway/internal/genproto/contractors"
+	"gateway/internal/genproto/contractors"
 )
 
 // SubmitBid godoc
@@ -14,15 +14,15 @@ import (
 // @Description Submits a bid for a contractor
 // @Accept json
 // @Produce json
-// @Param bid body pb.SubmitBidRequest true "Bid submission request"
-// @Success 200 {object} pb.SubmitBidResponse "Bid submitted successfully"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Param bid body contractors.SubmitBidRequest true "Bid submission request"
+// @Success 200 {object} contractors.BidResponse "Bid submitted successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /submit-bid [post]
 func (h *Handler) SubmitBid(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.SubmitBidRequest
+	var req contractors.SubmitBidRequest
 
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing request")
@@ -46,14 +46,14 @@ func (h *Handler) SubmitBid(r *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param tenderId query string true "Tender ID"
-// @Success 200 {object} pb.GetBidsResponse "List of bids retrieved successfully"
-// @Failure 400 {object} gin.H "Bad request"
-// @Failure 500 {object} gin.H "Internal server error"
+// @Success 200 {object} contractors.BidsListResponse "List of bids retrieved successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
 // @Router /bids [get]
 func (h *Handler) GetListOfBids(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req pb.GetBidsRequest
+	var req contractors.GetBidsRequest
 
 	if err := r.ShouldBindQuery(&req); err != nil {
 		log.Error("Error while parsing request")
@@ -62,6 +62,38 @@ func (h *Handler) GetListOfBids(r *gin.Context) {
 	}
 
 	resp, err := h.Clients.Contractor.GetBidsForTender(context.Background(), &req)
+	if err != nil {
+		log.Error("Error while get bids for tender")
+		r.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	log.Info("Successfully get bids for tender")
+	r.JSON(http.StatusOK, gin.H{"data": resp})
+}
+
+// GetMyBids godoc
+// @Summary Get list of bids by the current user
+// @Description Retrieves all bids made by the authenticated user on various tenders
+// @Accept json
+// @Produce json
+// @Param limit query int false "Limit for pagination"
+// @Param offset query int false "Offset for pagination"
+// @Success 200 {object} contractors.BidsListResponse "List of bids retrieved successfully"
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /bids/my [get]
+func (h *Handler) GetMyBids(r *gin.Context) {
+	log, _ := logs.NewLogger()
+
+	var req contractors.GetMyBidsRequest
+
+	if err := r.ShouldBindQuery(&req); err != nil {
+		log.Error("Error while parsing request")
+		r.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	resp, err := h.Clients.Contractor.GetMyBids(context.Background(), &req)
 	if err != nil {
 		log.Error("Error while get bids for tender")
 		r.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

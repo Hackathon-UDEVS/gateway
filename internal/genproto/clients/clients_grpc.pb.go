@@ -27,6 +27,7 @@ type ClientServiceClient interface {
 	GetAllTenders(ctx context.Context, in *GetAllTendersReq, opts ...grpc.CallOption) (*TendersList, error)
 	UpdateTenderStatus(ctx context.Context, in *UpdateTenderStatusReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 	DeleteTender(ctx context.Context, in *DeleteTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error)
+	SelectWinnerBid(ctx context.Context, in *SelectWinnerReq, opts ...grpc.CallOption) (*ResponseMessage, error)
 }
 
 type clientServiceClient struct {
@@ -39,7 +40,7 @@ func NewClientServiceClient(cc grpc.ClientConnInterface) ClientServiceClient {
 
 func (c *clientServiceClient) CreateTender(ctx context.Context, in *CreateTenderReq, opts ...grpc.CallOption) (*ResponseMessage, error) {
 	out := new(ResponseMessage)
-	err := c.cc.Invoke(ctx, "/tender.ClientService/DeleteTender", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/tender.ClientService/CreateTender", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +83,15 @@ func (c *clientServiceClient) DeleteTender(ctx context.Context, in *DeleteTender
 	return out, nil
 }
 
+func (c *clientServiceClient) SelectWinnerBid(ctx context.Context, in *SelectWinnerReq, opts ...grpc.CallOption) (*ResponseMessage, error) {
+	out := new(ResponseMessage)
+	err := c.cc.Invoke(ctx, "/tender.ClientService/SelectWinnerBid", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClientServiceServer is the server API for ClientService service.
 // All implementations must embed UnimplementedClientServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type ClientServiceServer interface {
 	GetAllTenders(context.Context, *GetAllTendersReq) (*TendersList, error)
 	UpdateTenderStatus(context.Context, *UpdateTenderStatusReq) (*ResponseMessage, error)
 	DeleteTender(context.Context, *DeleteTenderReq) (*ResponseMessage, error)
+	SelectWinnerBid(context.Context, *SelectWinnerReq) (*ResponseMessage, error)
 	mustEmbedUnimplementedClientServiceServer()
 }
 
@@ -99,7 +110,7 @@ type UnimplementedClientServiceServer struct {
 }
 
 func (UnimplementedClientServiceServer) CreateTender(context.Context, *CreateTenderReq) (*ResponseMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteTender not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTender not implemented")
 }
 func (UnimplementedClientServiceServer) GetMyTenders(context.Context, *GetMyTendersReq) (*TendersList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMyTenders not implemented")
@@ -112,6 +123,9 @@ func (UnimplementedClientServiceServer) UpdateTenderStatus(context.Context, *Upd
 }
 func (UnimplementedClientServiceServer) DeleteTender(context.Context, *DeleteTenderReq) (*ResponseMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteTender not implemented")
+}
+func (UnimplementedClientServiceServer) SelectWinnerBid(context.Context, *SelectWinnerReq) (*ResponseMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SelectWinnerBid not implemented")
 }
 func (UnimplementedClientServiceServer) mustEmbedUnimplementedClientServiceServer() {}
 
@@ -136,7 +150,7 @@ func _ClientService_CreateTender_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/tender.ClientService/DeleteTender",
+		FullMethod: "/tender.ClientService/CreateTender",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ClientServiceServer).CreateTender(ctx, req.(*CreateTenderReq))
@@ -216,6 +230,24 @@ func _ClientService_DeleteTender_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClientService_SelectWinnerBid_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SelectWinnerReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientServiceServer).SelectWinnerBid(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/tender.ClientService/SelectWinnerBid",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientServiceServer).SelectWinnerBid(ctx, req.(*SelectWinnerReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClientService_ServiceDesc is the grpc.ServiceDesc for ClientService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -224,7 +256,7 @@ var ClientService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ClientServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "DeleteTender",
+			MethodName: "CreateTender",
 			Handler:    _ClientService_CreateTender_Handler,
 		},
 		{
@@ -242,6 +274,10 @@ var ClientService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteTender",
 			Handler:    _ClientService_DeleteTender_Handler,
+		},
+		{
+			MethodName: "SelectWinnerBid",
+			Handler:    _ClientService_SelectWinnerBid_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
