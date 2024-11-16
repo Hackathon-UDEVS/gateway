@@ -1,21 +1,30 @@
 package handler
 
 import (
-	"github.com/gin-gonic/gin"
+	"gateway/api/clients"
+	"gateway/api/kafka"
+	"gateway/internal/config"
 )
 
 type Handler struct {
-	// Add any required dependencies here
+	Clients  *clients.Clients
+	Producer kafka.KafkaProducer
 }
 
-type Handlers struct {
-	// Add any required dependencies here
-}
+func NewHandler(cfg *config.Config) (*Handler, error) {
+	clients, err := clients.NewClients(cfg)
+	if err != nil {
+		return nil, err
+	}
 
-type HandlerInterface interface {
-	Test(c *gin.Context)
-}
+	kafkaProd, err := kafka.NewKafkaProducer([]string{cfg.KAFKA_HOST + cfg.KAFKA_PORT})
+	if err != nil {
+		return nil, err
+	}
 
-func NewHandler() HandlerInterface {
-	return &Handlers{}
+	return &Handler{
+		Clients:  clients,
+		Producer: kafkaProd,
+	}, nil
+
 }

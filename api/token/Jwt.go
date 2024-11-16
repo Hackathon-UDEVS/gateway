@@ -2,47 +2,48 @@ package tokens
 
 import (
 	"errors"
-	"time"
+	"fmt"
+	"log"
 
-	"github.com/golang-jwt/jwt/v5"
+	"github.com/golang-jwt/jwt"
 )
 
-var jwtKey = []byte("your-secret-key") // In production, use env variable
 
-type Claims struct {
-	UserID uint `json:"user_id"`
-	jwt.RegisteredClaims
-}
 
-// GenerateToken creates a new JWT token for a user
-func GenerateToken(userID uint) (string, error) {
-	claims := &Claims{
-		UserID: userID,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-		},
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
-}
-
-// ValidateToken validates the JWT token and returns the claims
-func ValidateToken(tokenString string) (*Claims, error) {
-	claims := &Claims{}
-	token, err := jwt.ParseWithClaims(tokenString, claims, func(t *jwt.Token) (interface{}, error) {
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("unexpected signing method")
-		}
-		return jwtKey, nil
+func VerifyToken(tokenString string) error {
+	secretKey := []byte("Bankay")
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		return secretKey, nil
 	})
 
+	if err != nil {
+		return err
+	}
+
+	if !token.Valid {
+		return fmt.Errorf("invalid token")
+	}
+
+	return nil
+}
+
+func ExtractClaims(tokenStr, key string) (jwt.MapClaims, error) {
+	var (
+		token *jwt.Token
+		err   error
+	)
+
+	keyFunc := func(token *jwt.Token) (interface{}, error) {
+		return []byte(key), nil
+	}
+	token, err = jwt.Parse(tokenStr, keyFunc)
+	log.Println("token : ",err)
 	if err != nil {
 		return nil, err
 	}
 
-	if !token.Valid {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !(ok && token.Valid) {
 		return nil, errors.New("invalid token")
 	}
 

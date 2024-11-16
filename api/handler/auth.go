@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Success 200 {string} string "test verified"
 // @Router /test [get]
-func (h *Handlers) Test(c *gin.Context) {
+func (h *Handler) Test(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "test verified",
 	})

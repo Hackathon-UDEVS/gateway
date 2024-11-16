@@ -1,10 +1,12 @@
 package api
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	handler "gateway/api/handler"
+
+	"gateway/api/handler"
 )
 
 // @title Test API
@@ -13,19 +15,28 @@ import (
 // @host localhost:8080
 // @BasePath /api/v1
 
-func InitRouter() *gin.Engine {
-	router := gin.New()
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
+func InitRouter(handler *handler.Handler) *gin.Engine {
+	router := gin.Default()
 
-	h := handler.NewHandler()
+	router.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"}, // Adjust for your specific origins
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 
-	// Swagger docs
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// enforcer, err := casbin.NewEnforcer("./casbin/model.conf", "./casbin/policy.csv")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// router.Use(middlerware.NewAuth(enforcer))
 
-	api := router.Group("/api/v1")
+	test := router.Group("test/")
+
 	{
-		api.GET("/test", h.Test)
+		test.GET("test1", handler.Test)
 	}
 
 	return router

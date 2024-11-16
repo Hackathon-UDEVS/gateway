@@ -33,6 +33,13 @@ type Config struct {
  AUTHHOST        string
  GATEWAYHOST     string
  GATEWAYPORT     int
+ POSTGRES_PORT   int
+ HTTP_PORT       string
+ KAFKA_PORT      string
+ MEDALS_HOST     string
+ MEDALS_PORT     string
+ KAFKA_HOST      string
+
 }
 
 func Load() Config {
@@ -63,7 +70,12 @@ func Load() Config {
   MONGOPORT:       cast.ToInt(getEnv("MONGOPORT", 1)),
   BOOKPORT:        cast.ToInt(getEnv("BOOKPORT", 1)),
   AUTHPORT:        cast.ToInt(getEnv("AUTHPORT", 1)),
-  GATEWAYPORT:     cast.ToInt(getEnv("GATEWAYPORT", 1)),
+  POSTGRES_PORT:   cast.ToInt(getEnv("POSTGRES_PORT", 1)),
+  HTTP_PORT:       cast.ToString(getEnv("HTTP_PORT", 1)),
+  KAFKA_HOST:      cast.ToString(getEnv("KAFKA_HOST", 1)),
+  KAFKA_PORT:      cast.ToString(getEnv("KAFKA_PORT", 1)),
+  MEDALS_HOST:     cast.ToString(getEnv("MEDALS_HOST", 1)),
+  MEDALS_PORT:     cast.ToString(getEnv("MEDALS_PORT", 1)),
  }
 
  return config
