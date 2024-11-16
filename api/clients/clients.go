@@ -7,11 +7,14 @@ import (
 
 	clients "gateway/internal/genproto/clients"
 	contructor "gateway/internal/genproto/contractors"
+
+	auth "gateway/internal/genproto/auth"
 )
 
 type Clients struct {
 	Client     clients.ClientServiceClient
 	Contractor contructor.BidServiceClient
+	User       auth.AuthServiceClient
 }
 
 func NewClients(cfg *config.Config) (*Clients, error) {
@@ -24,9 +27,12 @@ func NewClients(cfg *config.Config) (*Clients, error) {
 
 	client := clients.NewClientServiceClient(conn)
 	contractor := contructor.NewBidServiceClient(conn)
+	user := auth.NewAuthServiceClient(conn)
 
 	return &Clients{
 		Client:     client,
 		Contractor: contractor,
+		User:       user,
+
 	}, nil
 }

@@ -27,16 +27,30 @@ func InitRouter(handler *handler.Handler) *gin.Engine {
 		AllowCredentials: true,
 	}))
 
-	// enforcer, err := casbin.NewEnforcer("./casbin/model.conf", "./casbin/policy.csv")
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// router.Use(middlerware.NewAuth(enforcer))
-
-	test := router.Group("test/")
+	client := router.Group("/client")
 
 	{
-		test.GET("test1", handler.Test)
+		client.POST("/create-tender", handler.CreateTender)
+		client.PUT("/update-tender", handler.UpdateTender)
+		client.DELETE("/delete-tender/:id", handler.DeleteTender)
+		client.GET("/getAll-tenders", handler.GetTenders)
+		client.GET("/tenders/sort", handler.SortTenders)
+	}
+
+	contractor := router.Group("/contractor")
+	{
+		contractor.POST("/submit-bid", handler.SubmitBid)
+		contractor.GET("/bids", handler.GetListOfBids)
+	}
+
+	user := router.Group("/user")
+	{
+		user.POST("/login", handler.Login)
+		user.POST("/register", handler.Register)
+		user.POST("/verify-email", handler.VerifyEmail)
+		user.GET("/get-user/:id", handler.GetUserByID)
+		user.GET("getAll-users", handler.GetAllUsers)
+		user.PUT("update-user", handler.UpdateUser)
 	}
 
 	return router
