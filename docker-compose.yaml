@@ -1,0 +1,19 @@
+version: '3.9'
+
+services:
+
+gateway:
+  container_name: gateway
+  build: .
+  ports:
+      6060:6060
+  networks:
+    -Udevs
+  environment:
+      - KAFKA_BROKER=kafka:9092  
+
+networks:
+  Udevs:
+   external: true
+   name: gateway
+   driver: bridge

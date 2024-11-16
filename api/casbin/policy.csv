@@ -1,8 +1,9 @@
-p, admin, /api/*, GET
-p, admin, /api/*, POST
-p, admin, /api/*, PUT
-p, admin, /api/*, DELETE
-p, user, /api/*, GET
-p, user, /api/user/*, POST
-p, user, /api/user/*, PUT
-p, user, /api/user/*, DELETE
+p, client, /api/client/resource, GET
+p, client, /api/client/resource, POST
+
+p, constructor, /api/constructor/resource, GET
+p, constructor, /api/constructor/resource, POST
+
+# Role assignments
+g, user1, client
+g, user2, constructor

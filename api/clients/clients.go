@@ -5,19 +5,13 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	user "gateway/internal/genproto/user-service"
-	f "gateway/internal/genproto/first-service"
-	s "gateway/internal/genproto/second-service"
-	t "gateway/internal/genproto/third-service"
-	fr "gateway/internal/genproto/fourth-service"
+	clients "gateway/internal/genproto/clients"
+	contructor "gateway/internal/genproto/contractors"
 )
 
 type Clients struct {
-	User user.UserServiceClient
-	First  f.FirstServiceClient
-	Second s.SecondServiceClient
-	Third  t.ThirdServiceClient
-	Fourth fr.FourthServiceClient
+	Client     clients.ClientServiceClient
+	Contractor contructor.BidServiceClient
 }
 
 func NewClients(cfg *config.Config) (*Clients, error) {
@@ -28,17 +22,11 @@ func NewClients(cfg *config.Config) (*Clients, error) {
 		return nil, err
 	}
 
-	User1 := user.NewUserServiceClient(conn)
-	First1 := f.NewFirstServiceClient(conn)
-	Second1 := s.NewSecondServiceClient(conn)
-	Third1:= t.NewThirdServiceClient(conn)
-	Fourth1 := fr.NewFourthServiceClient(conn)
+	client := clients.NewClientServiceClient(conn)
+	contractor := contructor.NewBidServiceClient(conn)
 
 	return &Clients{
-		User: User1,
-		First: First1,
-		Second: Second1,
-		Third: Third1,
-		Fourth: Fourth1,
+		Client:     client,
+		Contractor: contractor,
 	}, nil
 }
