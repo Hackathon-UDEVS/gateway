@@ -14,21 +14,23 @@ import (
 // @description Test API with Swagger documentation
 // @host localhost:8091
 // @BasePath /api/v1
-
 func InitRouter(handler *handler.Handler) *gin.Engine {
 	router := gin.Default()
 
+	// Swagger route
 	router.GET("/api/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// CORS middleware
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Adjust for your specific origins
+		AllowOrigins:     []string{"*"}, // Adjust for specific allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 	}))
 
-	client := router.Group("/client")
-
+	// Client routes
+	client := router.Group("/api/v1/client")
 	{
 		client.POST("/create-tender", handler.CreateTender)
 		client.PUT("/update-tender", handler.UpdateTender)
@@ -37,20 +39,21 @@ func InitRouter(handler *handler.Handler) *gin.Engine {
 		client.GET("/tenders/sort", handler.SortTenders)
 	}
 
-	contractor := router.Group("/contractor")
+	// Contractor routes
+	contractor := router.Group("/api/v1/contractor")
 	{
 		contractor.POST("/submit-bid", handler.SubmitBid)
 		contractor.GET("/bids", handler.GetListOfBids)
 	}
 
-	user := router.Group("/user")
+	// User routes
+	user := router.Group("/api/v1/user")
 	{
-		router.POST("/login", handler.Login)
-		router.POST("/register", handler.Register)
-		//user.POST("/verify-email", handler.VerifyEmail)
-		router.GET("/get-user/:id", handler.GetUserByID)
-		router.GET("getAll-users", handler.GetAllUsers)
-		user.PUT("update-user", handler.UpdateUser)
+		user.POST("/login", handler.Login)
+		user.POST("/register", handler.Register)
+		user.GET("/get-user/:id", handler.GetUserByID)
+		user.GET("/getAll-users", handler.GetAllUsers)
+		user.PUT("/update-user", handler.UpdateUser)
 	}
 
 	return router

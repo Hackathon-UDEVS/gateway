@@ -1,8 +1,13 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "Test API with Swagger documentation",
+        "title": "Test API",
+        "contact": {},
+        "version": "1.0"
     },
+    "host": "localhost:8091",
+    "basePath": "/api/v1",
     "paths": {
         "/bids": {
             "get": {
@@ -97,7 +102,7 @@
                 }
             }
         },
-        "/create-tender": {
+        "/client/create-tender": {
             "post": {
                 "description": "Creates a new tender and returns the created tender data",
                 "consumes": [

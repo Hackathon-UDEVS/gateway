@@ -108,7 +108,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/create-tender": {
+        "/client/create-tender": {
             "post": {
                 "description": "Creates a new tender and returns the created tender data",
                 "consumes": [
@@ -915,12 +915,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
+	Version:          "1.0",
+	Host:             "localhost:8091",
+	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Title:            "Test API",
+	Description:      "Test API with Swagger documentation",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

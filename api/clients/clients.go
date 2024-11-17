@@ -2,6 +2,7 @@ package clients
 
 import (
 	"fmt"
+
 	"github.com/Hackaton-UDEVS/gateway/internal/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -20,8 +21,10 @@ type Clients struct {
 
 func NewClients(cfg *config.Config) (*Clients, error) {
 	authClient := fmt.Sprintf("%s:%d", cfg.AUTHHOST, cfg.AUTHPORT)
-	fmt.Println(authClient)
-	conn, err := grpc.NewClient(authClient, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	tenderClient := fmt.Sprintf("%s:%d", cfg.TENDERHOST, cfg.TENDERPORT)
+	fmt.Println(authClient, tenderClient)
+
+	conn, err := grpc.NewClient("localhost:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}

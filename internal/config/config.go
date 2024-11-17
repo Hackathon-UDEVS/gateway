@@ -33,6 +33,8 @@ type Config struct {
 	AUTHHOST        string
 	GATEWAYHOST     string
 	GATEWAYPORT     int
+	TENDERHOST      string
+	TENDERPORT      int
 }
 
 func Load() Config {
@@ -65,6 +67,8 @@ func Load() Config {
 		BOOKPORT:        cast.ToInt(getEnv("BOOKPORT", 1)),
 		AUTHPORT:        cast.ToInt(getEnv("AUTHPORT", 8085)),
 		GATEWAYPORT:     cast.ToInt(getEnv("GATEWAYPORT", 8091)),
+		TENDERHOST:      cast.ToString(getEnv("AUTHPORT", "localhost")),
+		TENDERPORT:      cast.ToInt(getEnv("GATEWAYPORT", 8080)),
 	}
 
 	return config

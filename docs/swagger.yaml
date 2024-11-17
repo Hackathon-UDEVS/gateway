@@ -1,3 +1,4 @@
+basePath: /api/v1
 definitions:
   auth.GetAllUserReq:
     properties:
@@ -186,8 +187,12 @@ definitions:
       tender_id:
         type: string
     type: object
+host: localhost:8091
 info:
   contact: {}
+  description: Test API with Swagger documentation
+  title: Test API
+  version: "1.0"
 paths:
   /bids:
     get:
@@ -250,7 +255,7 @@ paths:
       summary: Get list of bids by the current user
       tags:
       - bid
-  /create-tender:
+  /client/create-tender:
     post:
       consumes:
       - application/json
