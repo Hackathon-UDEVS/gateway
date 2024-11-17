@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"gateway/api/clients"
-	"gateway/internal/config"
+	"github.com/Hackaton-UDEVS/gateway/api/clients"
+	"github.com/Hackaton-UDEVS/gateway/internal/config"
 )
 
 type Handler struct {
@@ -10,10 +10,10 @@ type Handler struct {
 }
 
 func NewHandler(cfg *config.Config) (*Handler, error) {
-	
+
 	client, err := clients.NewClients(cfg)
 	if err != nil {
-		return nil, err 
+		return nil, err
 	}
 
 	return &Handler{

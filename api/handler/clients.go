@@ -2,8 +2,8 @@ package handler
 
 import (
 	"context"
-	"gateway/internal/genproto/clients"
-	"gateway/internal/logs"
+	"github.com/Hackaton-UDEVS/gateway/internal/genproto/tender-service"
+	"github.com/Hackaton-UDEVS/gateway/internal/logs"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,14 +13,15 @@ import (
 // @Description Creates a new tender and returns the created tender data
 // @Accept json
 // @Produce json
-// @Param tender body clients.CreateTenderReq true "Tender creation request"
-// @Success 200 {object} clients.ResponseMessage "Tender created successfully"
+// @tags tender
+// @Param tender body tender_service.CreateTenderReq true "Tender creation request"
+// @Success 200 {object} tender_service.ResponseMessage "Tender created successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Internal server error"
 // @Router /create-tender [post]
 func (h *Handler) CreateTender(r *gin.Context) {
 	log, _ := logs.NewLogger()
-	var req clients.CreateTenderReq
+	var req tender_service.CreateTenderReq
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing request")
 		r.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -43,8 +44,9 @@ func (h *Handler) CreateTender(r *gin.Context) {
 // @Description Updates the status of an existing tender
 // @Accept json
 // @Produce json
-// @Param tender body clients.UpdateTenderStatusReq true "Tender update request"
-// @Success 200 {object} clients.ResponseMessage "Tender updated successfully"
+// @tags tender
+// @Param tender body tender_service.UpdateTenderStatusReq true "Tender update request"
+// @Success 200 {object} tender_service.ResponseMessage "Tender updated successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Internal server error"
 // @Router /update-tender [put]
@@ -52,7 +54,7 @@ func (h *Handler) UpdateTender(r *gin.Context) {
 
 	log, _ := logs.NewLogger()
 
-	var req clients.UpdateTenderStatusReq
+	var req tender_service.UpdateTenderStatusReq
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing request")
 		r.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -74,7 +76,8 @@ func (h *Handler) UpdateTender(r *gin.Context) {
 // @Description Deletes a tender by ID
 // @Accept json
 // @Produce json
-// @Param tender body clients.DeleteTenderReq true "Tender deletion request"
+// @tags tender
+// @Param tender body tender_service.DeleteTenderReq true "Tender deletion request"
 // @Success 200 {object} string "Tender deleted successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Internal server error"
@@ -82,7 +85,7 @@ func (h *Handler) UpdateTender(r *gin.Context) {
 func (h *Handler) DeleteTender(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req clients.DeleteTenderReq
+	var req tender_service.DeleteTenderReq
 	if err := r.ShouldBindJSON(&req); err != nil {
 		log.Error("Error while parsing request")
 		r.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -104,15 +107,16 @@ func (h *Handler) DeleteTender(r *gin.Context) {
 // @Description Retrieves a list of tenders for the authenticated user
 // @Accept json
 // @Produce json
-// @Param query body clients.GetMyTendersReq true "Query parameters"
-// @Success 200 {object} clients.ResponseMessage "List of tenders retrieved successfully"
+// @tags tender
+// @Param query body tender_service.GetMyTendersReq true "Query parameters"
+// @Success 200 {object} tender_service.ResponseMessage "List of tenders retrieved successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Internal server error"
 // @Router /getAll-tenders [get]
 func (h *Handler) GetTenders(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req clients.GetMyTendersReq
+	var req tender_service.GetMyTendersReq
 
 	if err := r.ShouldBindQuery(&req); err != nil {
 		log.Error("Error while parsing request")
@@ -136,15 +140,16 @@ func (h *Handler) GetTenders(r *gin.Context) {
 // @Description Retrieves a sorted list of all tenders
 // @Accept json
 // @Produce json
-// @Param query body clients.GetAllTendersReq true "Query parameters"
-// @Success 200 {object} clients.TendersList "Sorted list of tenders retrieved successfully"
+// @tags tender
+// @Param query body tender_service.GetAllTendersReq true "Query parameters"
+// @Success 200 {object} tender_service.TendersList "Sorted list of tenders retrieved successfully"
 // @Failure 400 {object} string "Bad request"
 // @Failure 500 {object} string "Internal server error"
 // @Router /tenders/sort [get]
 func (h *Handler) SortTenders(r *gin.Context) {
 	log, _ := logs.NewLogger()
 
-	var req clients.GetAllTendersReq
+	var req tender_service.GetAllTendersReq
 
 	if err := r.ShouldBindQuery(&req); err != nil {
 		log.Error("Error while parsing request")

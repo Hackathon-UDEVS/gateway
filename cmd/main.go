@@ -2,17 +2,17 @@ package main
 
 import (
 	"fmt"
-	"gateway/api"
-	"gateway/api/handler"
-	"gateway/internal/config"
-	"gateway/internal/logs"
+	"github.com/Hackaton-UDEVS/gateway/api"
+	"github.com/Hackaton-UDEVS/gateway/api/handler"
+	"github.com/Hackaton-UDEVS/gateway/internal/config"
+	"github.com/Hackaton-UDEVS/gateway/internal/logs"
 	"go.uber.org/zap"
+	"os"
 
-	_ "gateway/docs"
+	_ "github.com/Hackaton-UDEVS/gateway/docs"
 )
 
 func main() {
-	// Load configuration
 	cfg := config.Load()
 
 	// Initialize logger
@@ -32,11 +32,17 @@ func main() {
 
 	// Initialize router
 	r := api.InitRouter(handlers)
-	fmt.Println(cfg.HTTP_PORT)
-	// Start the server
-	serverAddress := fmt.Sprintf(":%d", cfg.HTTP_PORT)
+
+	// Log the DB password for debugging (NOT RECOMMENDED IN PRODUCTION)
+	fmt.Println("DB Password:", cfg.DBPASSWORD)
+
+	// Start the server with proper error handling
+	serverAddress := fmt.Sprintf("%s:%d", cfg.GATEWAYHOST, cfg.GATEWAYPORT)
 	log.Info("Starting server", zap.String("address", serverAddress))
-	if err = r.Run(serverAddress); err != nil {
+
+	// Gracefully start the server
+	if err := r.Run(serverAddress); err != nil {
 		log.Fatal("Failed to start server", zap.Error(err))
+		os.Exit(1) // Ensure process exits if server fails to start
 	}
 }

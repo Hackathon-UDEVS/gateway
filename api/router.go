@@ -6,13 +6,13 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
-	"gateway/api/handler"
+	"github.com/Hackaton-UDEVS/gateway/api/handler"
 )
 
 // @title Test API
 // @version 1.0
 // @description Test API with Swagger documentation
-// @host localhost:8080
+// @host localhost:8091
 // @BasePath /api/v1
 
 func InitRouter(handler *handler.Handler) *gin.Engine {
@@ -45,11 +45,11 @@ func InitRouter(handler *handler.Handler) *gin.Engine {
 
 	user := router.Group("/user")
 	{
-		user.POST("/login", handler.Login)
-		user.POST("/register", handler.Register)
-		user.POST("/verify-email", handler.VerifyEmail)
-		user.GET("/get-user/:id", handler.GetUserByID)
-		user.GET("getAll-users", handler.GetAllUsers)
+		router.POST("/login", handler.Login)
+		router.POST("/register", handler.Register)
+		//user.POST("/verify-email", handler.VerifyEmail)
+		router.GET("/get-user/:id", handler.GetUserByID)
+		router.GET("getAll-users", handler.GetAllUsers)
 		user.PUT("update-user", handler.UpdateUser)
 	}
 

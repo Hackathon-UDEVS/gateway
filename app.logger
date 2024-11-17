@@ -1,1 +1,1 @@
-{"level":"info","time":"2024-11-17T02:55:26.827+0500","msg":"Starting server","address":":8091"}
+{"level":"error","time":"2024-11-17T08:55:01.688+0500","msg":"Error while parsing login data","email":""}

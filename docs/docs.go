@@ -24,6 +24,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "bid"
+                ],
                 "summary": "Get list of bids",
                 "parameters": [
                     {
@@ -38,7 +41,7 @@ const docTemplate = `{
                     "200": {
                         "description": "List of bids retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contractors.BidsListResponse"
+                            "$ref": "#/definitions/tender_service.BidsListResponse"
                         }
                     },
                     "400": {
@@ -65,6 +68,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "bid"
+                ],
                 "summary": "Get list of bids by the current user",
                 "parameters": [
                     {
@@ -84,7 +90,7 @@ const docTemplate = `{
                     "200": {
                         "description": "List of bids retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/contractors.BidsListResponse"
+                            "$ref": "#/definitions/tender_service.BidsListResponse"
                         }
                     },
                     "400": {
@@ -111,6 +117,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "tender"
+                ],
                 "summary": "Create a new tender",
                 "parameters": [
                     {
@@ -119,7 +128,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/clients.CreateTenderReq"
+                            "$ref": "#/definitions/tender_service.CreateTenderReq"
                         }
                     }
                 ],
@@ -127,7 +136,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Tender created successfully",
                         "schema": {
-                            "$ref": "#/definitions/clients.ResponseMessage"
+                            "$ref": "#/definitions/tender_service.ResponseMessage"
                         }
                     },
                     "400": {
@@ -154,6 +163,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "tender"
+                ],
                 "summary": "Delete a tender",
                 "parameters": [
                     {
@@ -162,7 +174,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/clients.DeleteTenderReq"
+                            "$ref": "#/definitions/tender_service.DeleteTenderReq"
                         }
                     }
                 ],
@@ -171,47 +183,6 @@ const docTemplate = `{
                         "description": "Tender deleted successfully",
                         "schema": {
                             "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/get-user/{id}": {
-            "get": {
-                "description": "Retrieves user data by user ID",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get user by ID",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User data retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/auth.GetUserByIDRes"
                         }
                     },
                     "400": {
@@ -238,6 +209,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "tender"
+                ],
                 "summary": "Get tenders",
                 "parameters": [
                     {
@@ -246,7 +220,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/clients.GetMyTendersReq"
+                            "$ref": "#/definitions/tender_service.GetMyTendersReq"
                         }
                     }
                 ],
@@ -254,50 +228,7 @@ const docTemplate = `{
                     "200": {
                         "description": "List of tenders retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/clients.ResponseMessage"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/getAll-users": {
-            "get": {
-                "description": "Retrieves a list of all users",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get all users",
-                "parameters": [
-                    {
-                        "description": "Query parameters",
-                        "name": "query",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.GetAllUserReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of users retrieved successfully",
-                        "schema": {
-                            "$ref": "#/definitions/auth.GetAllUserRes"
+                            "$ref": "#/definitions/tender_service.ResponseMessage"
                         }
                     },
                     "400": {
@@ -323,6 +254,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -367,6 +301,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "user"
+                ],
                 "summary": "Register user",
                 "parameters": [
                     {
@@ -410,6 +347,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "bid"
+                ],
                 "summary": "Submit a bid",
                 "parameters": [
                     {
@@ -418,7 +358,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/contractors.SubmitBidRequest"
+                            "$ref": "#/definitions/tender_service.SubmitBidRequest"
                         }
                     }
                 ],
@@ -426,7 +366,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Bid submitted successfully",
                         "schema": {
-                            "$ref": "#/definitions/contractors.BidResponse"
+                            "$ref": "#/definitions/tender_service.BidResponse"
                         }
                     },
                     "400": {
@@ -453,6 +393,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "tender"
+                ],
                 "summary": "Sort tenders",
                 "parameters": [
                     {
@@ -461,7 +404,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/clients.GetAllTendersReq"
+                            "$ref": "#/definitions/tender_service.GetAllTendersReq"
                         }
                     }
                 ],
@@ -469,7 +412,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Sorted list of tenders retrieved successfully",
                         "schema": {
-                            "$ref": "#/definitions/clients.TendersList"
+                            "$ref": "#/definitions/tender_service.TendersList"
                         }
                     },
                     "400": {
@@ -496,6 +439,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "tender"
+                ],
                 "summary": "Update an existing tender",
                 "parameters": [
                     {
@@ -504,7 +450,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/clients.UpdateTenderStatusReq"
+                            "$ref": "#/definitions/tender_service.UpdateTenderStatusReq"
                         }
                     }
                 ],
@@ -512,7 +458,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Tender updated successfully",
                         "schema": {
-                            "$ref": "#/definitions/clients.ResponseMessage"
+                            "$ref": "#/definitions/tender_service.ResponseMessage"
                         }
                     },
                     "400": {
@@ -530,7 +476,97 @@ const docTemplate = `{
                 }
             }
         },
-        "/update-user/{id}": {
+        "/user/get-user/{id}": {
+            "get": {
+                "description": "Retrieves user data by user ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/auth.GetUserByIDRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getAll-users": {
+            "get": {
+                "description": "Retrieves a list of all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Get all users",
+                "parameters": [
+                    {
+                        "description": "Query parameters",
+                        "name": "query",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.GetAllUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of users retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/auth.GetAllUserRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/update-user/{id}": {
             "put": {
                 "description": "Updates user data by ID",
                 "consumes": [
@@ -538,6 +574,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Update user",
                 "parameters": [
@@ -563,49 +602,6 @@ const docTemplate = `{
                         "description": "User updated successfully",
                         "schema": {
                             "$ref": "#/definitions/auth.UpdateUserRes"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/verify-email": {
-            "post": {
-                "description": "Verifies the user's email address",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Verify user email",
-                "parameters": [
-                    {
-                        "description": "Verify request",
-                        "name": "verify",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/auth.VerifyUserReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Email verification successful",
-                        "schema": {
-                            "$ref": "#/definitions/auth.VerifyUserRes"
                         }
                     },
                     "400": {
@@ -730,140 +726,7 @@ const docTemplate = `{
                 }
             }
         },
-        "auth.VerifyUserReq": {
-            "type": "object",
-            "properties": {
-                "sms_code": {
-                    "type": "string"
-                }
-            }
-        },
-        "auth.VerifyUserRes": {
-            "type": "object",
-            "properties": {
-                "res": {
-                    "$ref": "#/definitions/auth.UserModel"
-                }
-            }
-        },
-        "clients.CreateTenderReq": {
-            "type": "object",
-            "properties": {
-                "attachment": {
-                    "description": "Optional file URL",
-                    "type": "string"
-                },
-                "budget": {
-                    "type": "number"
-                },
-                "client_id": {
-                    "type": "string"
-                },
-                "deadline": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.DeleteTenderReq": {
-            "type": "object",
-            "properties": {
-                "tender_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.GetAllTendersReq": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.GetMyTendersReq": {
-            "type": "object",
-            "properties": {
-                "client_id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.ResponseMessage": {
-            "type": "object",
-            "properties": {
-                "message": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.Tender": {
-            "type": "object",
-            "properties": {
-                "attachment": {
-                    "type": "string"
-                },
-                "budget": {
-                    "type": "number"
-                },
-                "client_id": {
-                    "type": "string"
-                },
-                "deadline": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
-        "clients.TendersList": {
-            "type": "object",
-            "properties": {
-                "tenders": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/clients.Tender"
-                    }
-                }
-            }
-        },
-        "clients.UpdateTenderStatusReq": {
-            "type": "object",
-            "properties": {
-                "budget": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                },
-                "status": {
-                    "description": "e.g., \"open\", \"closed\", \"awarded\"",
-                    "type": "string"
-                },
-                "tender_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "contractors.Bid": {
+        "tender_service.Bid": {
             "type": "object",
             "properties": {
                 "comments": {
@@ -890,7 +753,7 @@ const docTemplate = `{
                 }
             }
         },
-        "contractors.BidResponse": {
+        "tender_service.BidResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -898,18 +761,77 @@ const docTemplate = `{
                 }
             }
         },
-        "contractors.BidsListResponse": {
+        "tender_service.BidsListResponse": {
             "type": "object",
             "properties": {
                 "bids": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/contractors.Bid"
+                        "$ref": "#/definitions/tender_service.Bid"
                     }
                 }
             }
         },
-        "contractors.SubmitBidRequest": {
+        "tender_service.CreateTenderReq": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "description": "Optional file URL",
+                    "type": "string"
+                },
+                "budget": {
+                    "type": "number"
+                },
+                "client_id": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.DeleteTenderReq": {
+            "type": "object",
+            "properties": {
+                "tender_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.GetAllTendersReq": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.GetMyTendersReq": {
+            "type": "object",
+            "properties": {
+                "client_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.ResponseMessage": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.SubmitBidRequest": {
             "type": "object",
             "properties": {
                 "comments": {
@@ -924,6 +846,64 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "integer"
+                },
+                "tender_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.Tender": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "type": "string"
+                },
+                "budget": {
+                    "type": "number"
+                },
+                "client_id": {
+                    "type": "string"
+                },
+                "deadline": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "tender_service.TendersList": {
+            "type": "object",
+            "properties": {
+                "tenders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/tender_service.Tender"
+                    }
+                }
+            }
+        },
+        "tender_service.UpdateTenderStatusReq": {
+            "type": "object",
+            "properties": {
+                "budget": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "e.g., \"open\", \"closed\", \"awarded\"",
+                    "type": "string"
                 },
                 "tender_id": {
                     "type": "string"

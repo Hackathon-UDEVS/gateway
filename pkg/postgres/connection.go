@@ -3,8 +3,8 @@ package postgres
 import (
 	"database/sql"
 	"fmt"
-	"gateway/internal/config"
-	"gateway/internal/logs"
+	"github.com/Hackaton-UDEVS/gateway/internal/config"
+	"github.com/Hackaton-UDEVS/gateway/internal/logs"
 )
 
 func ConnectionDB(cfg config.Config) (*sql.DB, error) {
